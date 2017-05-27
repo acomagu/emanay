@@ -80,26 +80,6 @@ export default class Example extends React.Component {
     }
   }
 
-  startRecording = () => {
-    if (this.camera) {
-      this.camera.capture({mode: Camera.constants.CaptureMode.video})
-          .then((data) => console.log(data))
-          .catch(err => console.error(err));
-      this.setState({
-        isRecording: true
-      });
-    }
-  }
-
-  stopRecording = () => {
-    if (this.camera) {
-      this.camera.stopCapture();
-      this.setState({
-        isRecording: false
-      });
-    }
-  }
-
   switchType = () => {
     let newType;
     const { back, front } = Camera.constants.Type;
@@ -219,28 +199,6 @@ export default class Example extends React.Component {
             </TouchableOpacity>
             ||
             null
-          }
-          <View style={styles.buttonsSpace} />
-          {
-              !this.state.isRecording
-              &&
-              <TouchableOpacity
-                  style={styles.captureButton}
-                  onPress={this.startRecording}
-              >
-                <Image
-                    source={require('./assets/ic_videocam_36pt.png')}
-                />
-              </TouchableOpacity>
-              ||
-              <TouchableOpacity
-                  style={styles.captureButton}
-                  onPress={this.stopRecording}
-              >
-                <Image
-                    source={require('./assets/ic_stop_36pt.png')}
-                />
-              </TouchableOpacity>
           }
         </View>
       </View>
