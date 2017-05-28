@@ -20,28 +20,26 @@ class Tegaki extends Component{
   }
 
   render() {
-    const imageList = this.state.images.map((image, i) => <Image style={styles.base64} key={i} source={{uri: image, scale: 3}}/>);
 
     return(
       <View style={styles.container}>
-        <Text style={{margin: 20, alignItems:"center",justifyContent:"center"}}>Signature Capture Extended </Text>
+        <Text style={{margin: 20, alignItems:"center",justifyContent:"center", backgroundColor: "white"}}>Signature Capture Extended </Text>
             <SignatureCapture
               style={styles.signature}
               ref="sign"
               onSaveEvent={this._onSaveEvent.bind(this)}
-              onDragEvent={this._onDragEvent.bind(this)}
               saveImageFileInExtStorage={false}
               showNativeButtons={false}
               viewMode={"landscape"}/>
         <View style={styles.buttonSpace}>
           <TouchableHighlight style={styles.buttonStyle}
-            underlayColor="#445588"
+            underlayColor="#42f4aa"
             onPress={() => { this.saveSign()} } >
             <Text>Save</Text>
           </TouchableHighlight>
 
           <TouchableHighlight style={styles.buttonStyle}
-            underlayColor="#445588"
+            underlayColor="#42f4aa"
             onPress={() => { this.resetSign() } } >
             <Text>Reset</Text>
           </TouchableHighlight>
@@ -53,6 +51,7 @@ class Tegaki extends Component{
 
   saveSign() {
     this.refs["sign"].saveImage();
+    this.refs["sign"].resetImage();
   }
 
   resetSign() {
@@ -63,10 +62,12 @@ class Tegaki extends Component{
     const prevImages = this.state.images;
     const base64String = `data:image/png;base64,${result.encoded}`;
     prevImages.push(base64String);
-    this.setState({images: prevImages});
-  }
-  _onDragEvent() {
-    // console.log("dragged");
+    if(prevImages.length >= 1) {
+      const imageList = prevImages.map((image, i) => <Image style={styles.base64} key={i} source={{uri: image, scale: 3}}/>);
+      this.props.onInputImages(prevImages);
+    } else {
+      this.setState({images: prevImages});
+    }
   }
 }
 

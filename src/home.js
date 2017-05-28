@@ -8,8 +8,7 @@ const launchscreenBg = require('../img/launchscreen-bg.png');
 
 export default class Home extends Component { // eslint-disable-line
   render() {
-    const { navigation } = this.props;
-    console.log(navigation);
+    const { navigate } = this.props;
     return (
       <Container>
         <StatusBar barStyle='light-content'/>
@@ -25,7 +24,7 @@ export default class Home extends Component { // eslint-disable-line
           <View style={{ marginBottom: 80 }}>
             <Button
               style={{ backgroundColor: '#6FAF98', alignSelf: 'center' }}
-              onPress={() => navigation.navigate('IconExample')}
+              onPress={() => navigate('InputNames')}
             >
               <Text>スタート</Text>
             </Button>

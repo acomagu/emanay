@@ -8,6 +8,19 @@ import {
 } from 'react-native';
 import Camera from 'react-native-camera';
 
+// import { RNS3 } from 'react-native-aws3';
+
+const options = {
+  keyPrefix: "uploads/",
+  bucket: "shop-bot-view",
+  region: "ap-northeast-1",
+  accessKey: "",
+  secretKey: "",
+  successActionStatus: 201
+}
+
+
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -68,14 +81,31 @@ export default class Example extends React.Component {
         orientation: Camera.constants.Orientation.auto,
         flashMode: Camera.constants.FlashMode.auto,
       },
-      isRecording: false
+      isRecording: false,
+      i: 0,
     };
   }
 
   takePicture = () => {
     if (this.camera) {
       this.camera.capture()
-        .then((data) => console.log(data))
+        .then((data) => {
+          this.setState({i: this.state.i + 1});
+          const file = {
+            uri: data.path,
+            name: "image.jpg",
+            type: "image/jpg"
+          }
+          if(this.state.i >= 2) {
+            this.props.onInputImages()
+          }
+          // RNS3.put(file, options).then(response => {
+          //   if (response.status !== 201)
+          //     throw new Error("Failed to upload image to S3");
+          //   console.log(response.body);
+          // });
+          console.log(data)
+        })
         .catch(err => console.error(err));
     }
   }
@@ -103,9 +133,9 @@ export default class Example extends React.Component {
     const { back, front } = Camera.constants.Type;
 
     if (this.state.camera.type === back) {
-      icon = require('./assets/ic_camera_rear_white.png');
+      icon = require('../assets/ic_camera_rear_white.png');
     } else if (this.state.camera.type === front) {
-      icon = require('./assets/ic_camera_front_white.png');
+      icon = require('../assets/ic_camera_front_white.png');
     }
 
     return icon;
@@ -136,11 +166,11 @@ export default class Example extends React.Component {
     const { auto, on, off } = Camera.constants.FlashMode;
 
     if (this.state.camera.flashMode === auto) {
-      icon = require('./assets/ic_flash_auto_white.png');
+      icon = require('../assets/ic_flash_auto_white.png');
     } else if (this.state.camera.flashMode === on) {
-      icon = require('./assets/ic_flash_on_white.png');
+      icon = require('../assets/ic_flash_on_white.png');
     } else if (this.state.camera.flashMode === off) {
-      icon = require('./assets/ic_flash_off_white.png');
+      icon = require('../assets/ic_flash_off_white.png');
     }
 
     return icon;
@@ -194,7 +224,7 @@ export default class Example extends React.Component {
                 onPress={this.takePicture}
             >
               <Image
-                  source={require('./assets/ic_photo_camera_36pt.png')}
+                  source={require('../assets/ic_photo_camera_36pt.png')}
               />
             </TouchableOpacity>
             ||

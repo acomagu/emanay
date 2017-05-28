@@ -8,6 +8,10 @@ import {
   StackNavigator,
 } from 'react-navigation';
 import Home from './home.js';
+import Camera from './camera.js';
+import Canvas from './canvas.js';
+import InputNames from './inputnames.js';
+import ShowImages from './showimage.js';
 
 class IconExample extends React.Component {
   constructor(props) {
@@ -65,8 +69,33 @@ const A = () => (
   </Container>
 );
 
-export default StackNavigator({
-  Home: {
+export default class Emanay extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      names: ["", "", ""],
+      screenName: 'Home',
+      imageElms: [],
+    };
+    this.screens = {
+      'Home': <Home navigate={(screenName) => this.setState({screenName})} />,
+      'Camera': <Camera navigate={(screenName) => this.setState({screenName})} onInputImages={() => this.setState({screenName: "ShowImages"})} />,
+      'Canvas': <Canvas navigate={(screenName) => this.setState({screenName})} onInputImages={(imageElms) => this.handleImages(imageElms)} />,
+      'InputNames': <InputNames onChangeNames={(names) => this.setState({names})} navigate={(screenName) => this.setState({screenName})} />,
+      'ShowImages': <ShowImages />
+    };
+  }
+  handleImages(imageElms) {
+    this.setState({imageElms, screenName: "Camera"});
+  }
+  render() {
+    console.log(this.screens[this.state.screenName]);
+    return this.screens[this.state.screenName];
+  }
+}
+
+StackNavigator({
+  Main: {
     screen: Home,
     navigationOptions: ({navigation}) => ({
       header: null,
@@ -79,8 +108,26 @@ export default StackNavigator({
       header: null,
     }),
   },
+  Camera: {
+    screen: Camera,
+    navigationOptions: ({navigation}) => ({
+      header: null,
+    }),
+  },
+  Canvas: {
+    screen: Canvas,
+    navigationOptions: ({navigation}) => ({
+      header: null,
+    }),
+  },
   A: {
     screen: A,
+    navigationOptions: ({navigation}) => ({
+      header: null,
+    }),
+  },
+  InputNames: {
+    screen: InputNames,
     navigationOptions: ({navigation}) => ({
       header: null,
     }),
