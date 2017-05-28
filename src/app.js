@@ -7,6 +7,7 @@ import {
 import {
   StackNavigator,
 } from 'react-navigation';
+import Home from './home.js';
 
 class IconExample extends React.Component {
   constructor(props) {
@@ -65,7 +66,13 @@ const A = () => (
 );
 
 export default StackNavigator({
-  Main: {
+  Home: {
+    screen: Home,
+    navigationOptions: ({navigation}) => ({
+      header: null,
+    }),
+  },
+  IconExample: {
     screen: IconExample,
     headerMode: "none",
     navigationOptions: ({navigation}) => ({
