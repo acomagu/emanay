@@ -8,6 +8,19 @@ import {
 } from 'react-native';
 import Camera from 'react-native-camera';
 
+import { RNS3 } from 'react-native-aws3';
+
+const options = {
+  keyPrefix: "uploads/",
+  bucket: "shop-bot-view",
+  region: "ap-northeast-1",
+  accessKey: "",
+  secretKey: "",
+  successActionStatus: 201
+}
+
+
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -75,7 +88,19 @@ export default class Example extends React.Component {
   takePicture = () => {
     if (this.camera) {
       this.camera.capture()
-        .then((data) => console.log(data))
+        .then((data) => {
+          const file = {
+            uri: data.path,
+            name: "image.jpg",
+            type: "image/jpg"
+          }
+          RNS3.put(file, options).then(response => {
+            if (response.status !== 201)
+              throw new Error("Failed to upload image to S3");
+            console.log(response.body);
+          });
+          console.log(data)
+        })
         .catch(err => console.error(err));
     }
   }
