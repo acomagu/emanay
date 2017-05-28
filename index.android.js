@@ -1,15 +1,11 @@
-import React, { Component } from 'react';
-import { AppRegistry, View } from 'react-native';
+/**
+ * Sample React Native App
+ * https://github.com/facebook/react-native
+ * @flow
+ */
 
-import Example from './Example';
-import Home from './src/home.js';
+import { AppRegistry } from 'react-native';
 
-export default class emanay extends Component {
-  render() {
-    return (
-      <Home />
-    );
-  }
-}
+import Emanay from './src/app.js';
 
-AppRegistry.registerComponent('emanay', () => emanay);
+AppRegistry.registerComponent('emanay', () => Emanay);
