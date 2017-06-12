@@ -88,20 +88,30 @@ export default class Example extends React.Component {
   takePicture = () => {
     if (this.camera) {
       this.camera.capture()
-        .then((data) => {
-          const file = {
-            uri: data.path,
-            name: "image.jpg",
-            type: "image/jpg"
-          }
-          RNS3.put(file, options).then(response => {
-            if (response.status !== 201)
-              throw new Error("Failed to upload image to S3");
-            console.log(response.body);
-          });
-          console.log(data)
-        })
-        .catch(err => console.error(err));
+      .then((data) => {
+        var l = 8;
+
+        // 生成する文字列に含める文字セット
+        var c = "abcdefghijklmnopqrstuvwxyz0123456789";
+
+        var cl = c.length;
+        var r = "";
+        for(var i=0; i<l; i++){
+          r += c[Math.floor(Math.random()*cl)];
+        }
+        const file = {
+          uri: data.path,
+          name: r + ".jpg",
+          type: "image/jpg"
+        }
+        RNS3.put(file, options).then(response => {
+          if (response.status !== 201)
+          throw new Error("Failed to upload image to S3");
+          console.log(response.body);
+        });
+        console.log(data)
+      })
+      .catch(err => console.error(err));
     }
   }
 
@@ -177,7 +187,7 @@ export default class Example extends React.Component {
         <StatusBar
           animated
           hidden
-        />
+          />
         <Camera
           ref={(cam) => {
             this.camera = cam;
@@ -191,23 +201,23 @@ export default class Example extends React.Component {
           onZoomChanged={() => {}}
           defaultTouchToFocus
           mirrorImage={false}
-        />
+          />
         <View style={[styles.overlay, styles.topOverlay]}>
           <TouchableOpacity
             style={styles.typeButton}
             onPress={this.switchType}
-          >
+            >
             <Image
               source={this.typeIcon}
-            />
+              />
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.flashButton}
             onPress={this.switchFlash}
-          >
+            >
             <Image
               source={this.flashIcon}
-            />
+              />
           </TouchableOpacity>
         </View>
         <View style={[styles.overlay, styles.bottomOverlay]}>
@@ -215,12 +225,12 @@ export default class Example extends React.Component {
             !this.state.isRecording
             &&
             <TouchableOpacity
-                style={styles.captureButton}
-                onPress={this.takePicture}
-            >
+              style={styles.captureButton}
+              onPress={this.takePicture}
+              >
               <Image
-                  source={require('./assets/ic_photo_camera_36pt.png')}
-              />
+                source={require('./assets/ic_photo_camera_36pt.png')}
+                />
             </TouchableOpacity>
             ||
             null
